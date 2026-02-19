@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Extracción de datos con Elicit | REBISALUD</title>
+<style>
+:root {
+  --navy: #1B3A5C;
+  --blue: #2B6CB0;
+  --teal: #00A99D;
+  --light-blue: #E8F4FD;
+  --gray-bg: #F0F2F5;
+  --gray-text: #64748B;
+  --white: #FFFFFF;
+  --shadow: 0 4px 24px rgba(27, 58, 92, 0.10);
+  --shadow-hover: 0 8px 32px rgba(27, 58, 92, 0.16);
+  --radius: 12px;
+  --sidebar-w: 260px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Montserrat', -apple-system, sans-serif;
+  background: var(--gray-bg);
+  color: var(--navy);
+  min-height: 100vh;
+}
+
+/* ===== HEADER ===== */
+.header {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 40%, var(--teal) 70%, #E0F2F1 90%);
+  color: white;
+  padding: 2rem 2rem 1.5rem;
+  position: relative;
+  margin-left: var(--sidebar-w);
+}
+.header-logo {
+  position: absolute;
+  top: 0; right: 1.5rem;
+  height: 100%;
+  padding: 0.8rem 0;
+  opacity: 0.92;
+}
+.header-text { padding-right: 130px; }
+.header-congress {
+  font-size: 0.8rem;
+  font-weight: 300;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  opacity: 0.75;
+  margin-bottom: 0.4rem;
+}
+.header h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 0.4rem;
+}
+.header-meta {
+  font-size: 0.82rem;
+  font-weight: 300;
+  opacity: 0.8;
+  line-height: 1.5;
+}
+.header-meta strong { font-weight: 500; opacity: 1; }
+.header-meta a { color: white; text-decoration: underline; text-underline-offset: 2px; }
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--sidebar-w);
+  height: 100vh;
+  background: var(--white);
+  border-right: 1px solid #E2E8F0;
+  overflow-y: auto;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar-header {
+  padding: 1.2rem 1rem 0.8rem;
+  border-bottom: 1px solid #E2E8F0;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gray-text);
+}
+.sidebar-nav { padding: 0.6rem 0; flex: 1; }
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 1rem;
+  text-decoration: none;
+  color: var(--navy);
+  font-size: 0.8rem;
+  font-weight: 400;
+  border-left: 3px solid transparent;
+  transition: all 0.2s;
+}
+.sidebar-nav a:hover {
+  background: var(--gray-bg);
+  border-left-color: var(--teal);
+}
+.sidebar-nav a.active {
+  background: var(--light-blue);
+  border-left-color: var(--blue);
+  font-weight: 600;
+}
+.sidebar-nav a .nav-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--gray-bg);
+  font-size: 0.7rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.sidebar-nav a.active .nav-num {
+  background: var(--blue);
+  color: white;
+}
+
+/* ===== MAIN CONTENT ===== */
+.main {
+  margin-left: var(--sidebar-w);
+  padding: 2rem 2.5rem 4rem;
+  max-width: calc(var(--sidebar-w) + 900px);
+}
+
+/* ===== BLOCKS ===== */
+.block {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  scroll-margin-top: 1.5rem;
+}
+.block-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+.block-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--blue);
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.block-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+.block-meta {
+  font-size: 0.78rem;
+  color: var(--gray-text);
+  font-weight: 400;
+  margin-left: 0.3rem;
+}
+.block p {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  margin-bottom: 1rem;
+}
+.block h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.6rem;
+  color: var(--navy);
+}
+.block h4 {
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin: 1.2rem 0 0.4rem;
+  color: var(--blue);
+}
+.block ul, .block ol {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  margin: 0 0 1rem 1.2rem;
+}
+
+/* ===== PROMPT BOXES ===== */
+.prompt-box {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-left: 4px solid var(--teal);
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  margin: 1rem 0;
+  position: relative;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+.prompt-box .copy-btn {
+  position: absolute;
+  top: 0.5rem; right: 0.5rem;
+  background: var(--teal);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.3rem 0.7rem;
+  font-family: inherit;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.prompt-box .copy-btn:hover { background: #008F85; }
+.prompt-box .copy-btn.copied { background: var(--navy); }
+
+/* ===== TOOL LINK ===== */
+.tool-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background: linear-gradient(135deg, var(--blue), var(--teal));
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  margin: 0.5rem 0.5rem 0.5rem 0;
+}
+.tool-link:hover { transform: translateY(-1px); box-shadow: var(--shadow-hover); }
+
+/* ===== TABLES ===== */
+.block table, .modal table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin: 1rem 0;
+}
+.block th, .modal th {
+  background: var(--light-blue);
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+  font-weight: 600;
+  font-size: 0.8rem;
+  border-bottom: 2px solid var(--blue);
+}
+.block td, .modal td {
+  padding: 0.55rem 0.8rem;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+/* ===== CASE CARD ===== */
+.case-card {
+  background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+  border: 1px solid #F59E0B;
+  border-radius: var(--radius);
+  padding: 1.2rem 1.5rem;
+  margin: 1rem 0;
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+.case-card strong { color: #92400E; }
+.case-card .patient-question {
+  font-style: italic;
+  margin-top: 0.8rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid #F59E0B;
+  color: #92400E;
+  font-weight: 500;
+}
+
+/* ===== CRITERIA TABLE ===== */
+.criteria-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin: 1rem 0;
+}
+.criteria-table th {
+  background: var(--light-blue);
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+  font-weight: 600;
+  font-size: 0.8rem;
+  border-bottom: 2px solid var(--blue);
+}
+.criteria-table td {
+  padding: 0.55rem 0.8rem;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+/* ===== MODALS ===== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(27, 58, 92, 0.5);
+  z-index: 200;
+  justify-content: center;
+  align-items: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  padding: 2rem;
+  max-width: 650px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+}
+.modal h2 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: var(--navy);
+}
+.modal p, .modal li {
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+.modal ul { margin: 0.5rem 0 1rem 1.2rem; }
+.modal-close {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--gray-text);
+  line-height: 1;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  margin-left: var(--sidebar-w);
+  padding: 2rem;
+  text-align: center;
+  border-top: 1px solid #E2E8F0;
+  background: var(--white);
+}
+.footer img { height: 30px; opacity: 0.6; margin-bottom: 0.5rem; }
+.footer p {
+  font-size: 0.75rem;
+  color: var(--gray-text);
+  line-height: 1.6;
+}
+.footer a { color: var(--blue); text-decoration: none; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .header, .main, .footer { margin-left: 0; }
+  .header-text { padding-right: 80px; }
+  .header-logo { height: 60px; top: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<nav class="sidebar">
+  <div class="sidebar-header">REBISALUD — IA para bibliotecarios</div>
+  <div class="sidebar-nav">
+    <a href="#intro"><span class="nav-num">0</span> Introduccion</a>
+    <a href="#bloque1"><span class="nav-num">1</span> Caso clinico y PICO</a>
+    <a href="#bloque2"><span class="nav-num">2</span> Elicit: busqueda</a>
+    <a href="#bloque3"><span class="nav-num">3</span> Elicit: columnas</a>
+    <a href="#bloque4"><span class="nav-num">4</span> Revisar y exportar</a>
+  </div>
+</nav>
+
+<!-- ===== HEADER ===== -->
+<header class="header">
+  <img src="alterbiblio-logo.png" alt="AlterBiblio" class="header-logo">
+  <div class="header-text">
+    <div class="header-congress">REBISALUD</div>
+    <h1>Extraccion de datos con Elicit</h1>
+    <div class="header-meta">
+      <strong><a href="https://www.linkedin.com/in/mariagarciapuente/" target="_blank">Maria Garcia-Puente</a></strong> · AlterBiblio<br>
+      Taller de inteligencia artificial para bibliotecarios de ciencias de la salud
+    </div>
+  </div>
+</header>
+
+<!-- ===== MAIN ===== -->
+<div class="main">
+
+  <!-- INTRO -->
+  <section class="block" id="intro">
+    <div class="block-header">
+      <span class="block-num">0</span>
+      <div><span class="block-title">Que es Elicit</span></div>
+    </div>
+
+    <p>Elicit es un asistente de investigacion basado en IA que busca articulos por significado semantico (no solo por palabras clave) y extrae datos automaticamente en columnas personalizables.</p>
+
+    <p>Es como un becario de investigacion que lee los papers por ti y te rellena una tabla con exactamente la informacion que necesitas.</p>
+
+    <a href="https://elicit.com" target="_blank" class="tool-link">&#8599; Abrir Elicit</a>
+
+    <h3>Para que sirve</h3>
+    <ul>
+      <li>Buscar articulos relevantes sobre una pregunta de investigacion</li>
+      <li>Extraer datos especificos de cada articulo (poblacion, intervencion, resultados...)</li>
+      <li>Generar tablas comparativas listas para exportar a CSV o Excel</li>
+      <li>Revisar rapidamente decenas de articulos sin leerlos enteros</li>
+    </ul>
+  </section>
+
+  <!-- BLOQUE 1: Caso clinico -->
+  <section class="block" id="bloque1">
+    <div class="block-header">
+      <span class="block-num">1</span>
+      <div><span class="block-title">Caso clinico y pregunta PICO</span></div>
+    </div>
+
+    <p>Para practicar con Elicit, vamos a partir de un caso clinico concreto y su pregunta de investigacion en formato PICO. Esto nos dara las columnas que luego configuraremos en Elicit.</p>
+
+    <h3>El caso</h3>
+    <div class="case-card">
+      Mujer de 58 anos, hipertensa de larga evolucion, con ERC estadio 3b (TFGe 38 ml/min/1,73m2) diagnosticada hace 3 anos. Etiologia: nefroangioesclerosis (no diabetica). Tratamiento actual: enalapril 20 mg/dia, amlodipino 5 mg/dia. Proteinuria persistente (UACR 350 mg/g) a pesar de buen control tensional (128/76 mmHg). En la ultima analitica, la TFGe ha bajado a 34. No tiene diabetes ni antecedentes de enfermedad glomerular.
+      <div class="patient-question">"Doctora, no hay nada mas que pueda tomar para que esto no vaya a mas?"</div>
+    </div>
+
+    <h3>Pregunta de investigacion</h3>
+    <p><em>Existen intervenciones farmacologicas, ademas del bloqueo del SRAA, que hayan demostrado reducir la progresion de la enfermedad renal cronica no diabetica a enfermedad renal terminal?</em></p>
+
+    <h3>Formato PICO</h3>
+    <table class="criteria-table">
+      <thead><tr><th>PICO</th><th>Definicion</th></tr></thead>
+      <tbody>
+        <tr><td><strong>P</strong> (Paciente)</td><td>Adultos con ERC estadio 3-4 de etiologia no diabetica, en tratamiento con bloqueo del SRAA</td></tr>
+        <tr><td><strong>I</strong> (Intervencion)</td><td>Cualquier intervencion farmacologica adicional al tratamiento estandar</td></tr>
+        <tr><td><strong>C</strong> (Comparador)</td><td>Tratamiento estandar solo (bloqueo SRAA + antihipertensivos)</td></tr>
+        <tr><td><strong>O</strong> (Outcome)</td><td>Progresion a enfermedad renal terminal, descenso sostenido de TFGe >=40% o duplicacion de creatinina</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- BLOQUE 2: Busqueda -->
+  <section class="block" id="bloque2">
+    <div class="block-header">
+      <span class="block-num">2</span>
+      <div><span class="block-title">Busqueda en Elicit</span></div>
+    </div>
+
+    <p>Elicit no usa palabras clave como PubMed. Le escribimos la pregunta de investigacion en lenguaje natural (en ingles) y busca por significado semantico.</p>
+
+    <a href="https://elicit.com" target="_blank" class="tool-link">&#8599; Abrir Elicit</a>
+
+    <h3>Consulta de busqueda</h3>
+    <div class="prompt-box">SGLT2 inhibitors in non-diabetic chronic kidney disease progression<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+
+    <h3>Que observar en los resultados</h3>
+    <ul>
+      <li>Elicit devuelve articulos ordenados por relevancia semantica, no por fecha</li>
+      <li>Muestra un breve resumen generado por IA de cada articulo</li>
+      <li>Podemos filtrar por ano, tipo de estudio, etc.</li>
+      <li>Los articulos vienen con columnas predefinidas (titulo, autores, ano, abstract...)</li>
+    </ul>
+
+    <p><strong>El siguiente paso es lo mas potente de Elicit:</strong> anadir columnas personalizadas para extraer exactamente los datos que necesitamos.</p>
+  </section>
+
+  <!-- BLOQUE 3: Columnas -->
+  <section class="block" id="bloque3">
+    <div class="block-header">
+      <span class="block-num">3</span>
+      <div><span class="block-title">Configurar columnas de extraccion</span></div>
+    </div>
+
+    <p>Los elementos de la pregunta PICO se convierten directamente en las columnas que pedimos a Elicit. Para cada columna, anadid una columna personalizada y pegad las instrucciones:</p>
+
+    <h4>1. Study design</h4>
+    <div class="prompt-box" style="margin-bottom:1rem">Classify the study design. Answer with one of: RCT, post-hoc analysis of RCT, systematic review, meta-analysis, observational cohort, or other. If it is a post-hoc or subgroup analysis, mention the parent trial name. Example:
+
+- Post-hoc analysis of DAPA-CKD trial<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+
+    <h4>2. Population &amp; eGFR</h4>
+    <div class="prompt-box" style="margin-bottom:1rem">Extract the baseline renal function of participants. Include:
+- eGFR range or mean +/- SD at enrollment (ml/min/1.73m2)
+- CKD stage if stated
+- Whether the population is exclusively non-diabetic, mixed, or has a non-diabetic subgroup analysis
+- Percentage of diabetic patients if reported
+
+Example:
+- Mean eGFR 37.3 ml/min/1.73m2 (CKD 3b-4)
+- 32.5% diabetic; non-diabetic subgroup analysis available<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+
+    <h4>3. Intervention</h4>
+    <div class="prompt-box" style="margin-bottom:1rem">Extract the pharmacological intervention tested. Include drug name, dose, and administration route. If multiple doses were tested, list all arms. Example:
+
+- Dapagliflozin 10 mg/day oral<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+
+    <h4>4. Comparator</h4>
+    <div class="prompt-box" style="margin-bottom:1rem">Describe the comparator group. Specify if it is placebo, standard of care, active control, or a combination. Mention if all patients received background RAAS blockade. Example:
+
+- Placebo + standard of care (including RAAS inhibitors in 97% of patients)<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+
+    <h4>5. Primary renal outcome</h4>
+    <div class="prompt-box" style="margin-bottom:1rem">Extract the primary renal endpoint exactly as defined by the study. If it is a composite, list all components. Distinguish between the overall primary outcome and renal-specific outcomes if different. Example:
+
+- Composite: sustained >=50% eGFR decline, ESKD, or renal death
+- Renal-specific secondary: sustained >=57% eGFR decline or ESKD<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+
+    <h4>6. Main result</h4>
+    <div class="prompt-box" style="margin-bottom:1rem">Extract the main efficacy result for the renal outcome. Report hazard ratio (HR) or relative risk (RR) with 95% confidence interval and p-value. If there is a non-diabetic subgroup result, report that separately. Example:
+
+- Overall: HR 0.61 (95% CI 0.51-0.72; p&lt;0.001)
+- Non-diabetic subgroup: HR 0.64 (95% CI 0.47-0.88)<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+
+    <h4>7. Follow-up</h4>
+    <div class="prompt-box" style="margin-bottom:1rem">Extract the follow-up duration. Report median follow-up in months or years. If the trial was stopped early, mention the reason. Example:
+
+- Median 2.4 years (stopped early for efficacy)<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+  </section>
+
+  <!-- BLOQUE 4: Revisar -->
+  <section class="block" id="bloque4">
+    <div class="block-header">
+      <span class="block-num">4</span>
+      <div><span class="block-title">Revisar y exportar</span></div>
+    </div>
+
+    <p>Elicit extrae los datos automaticamente, pero <strong>el clinico (o el bibliotecario) siempre valida</strong>. Puntos clave a revisar:</p>
+
+    <ul>
+      <li>N total vs N del subgrupo no diabetico</li>
+      <li>HR global vs HR del subgrupo</li>
+      <li>Confusion entre outcome compuesto y secundario</li>
+      <li>Articulos irrelevantes que Elicit haya incluido por similitud semantica</li>
+    </ul>
+
+    <h3>Exportar</h3>
+    <p>Una vez revisada la tabla, exportadla como CSV. Podeis abrirla en Excel, Google Sheets, o subirla a otras herramientas de IA (como NotebookLM) para generar sintesis narrativas.</p>
+
+    <h3>Mensaje clave</h3>
+    <p><strong>Elicit no sustituye la lectura critica, pero reduce drasticamente el tiempo de triaje.</strong> En 20 minutos podeis tener una tabla comparativa de 15-20 articulos que de forma manual llevaria horas.</p>
+  </section>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <img src="alterbiblio-logo.png" alt="AlterBiblio">
+  <p>&copy; 2026 AlterBiblio · <a href="https://www.linkedin.com/in/mariagarciapuente/" target="_blank">Maria Garcia-Puente</a></p>
+</footer>
+
+<!-- ===== SCRIPTS ===== -->
+<script>
+// Copy prompt
+function copyPrompt(btn) {
+  const box = btn.parentElement;
+  const text = box.textContent.replace('Copiar', '').replace('Copiado', '').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copiado';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copiar';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+// Active sidebar on scroll
+const sections = document.querySelectorAll('.block');
+const navLinks = document.querySelectorAll('.sidebar-nav a');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+</script>
+</body>
+</html>
